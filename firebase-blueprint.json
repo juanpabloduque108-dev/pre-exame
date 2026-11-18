@@ -1,0 +1,141 @@
+{
+  "entities": {
+    "Question": {
+      "title": "Question",
+      "description": "Pregunta del banco oficial CALE almacenada en Cloud Firestore",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "bloque": { "type": "string", "enum": ["Conocimientos", "Actitudes"] },
+        "tema": {
+          "type": "string",
+          "enum": ["Movilidad Segura", "Normas", "Señales", "Vehículo", "Actitudes"]
+        },
+        "tipo": { "type": "string", "enum": ["multiple", "binary"] },
+        "caso": { "type": "string", "maxLength": 4000 },
+        "enunciado": { "type": "string", "maxLength": 6000 },
+        "opciones": { "type": "array" },
+        "respuestaCorrecta": { "type": "string", "maxLength": 100 },
+        "explicacion": { "type": "string", "maxLength": 4000 },
+        "moduloAulapp": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "bloque", "tema", "tipo", "enunciado", "opciones", "respuestaCorrecta", "explicacion", "createdAt"]
+    },
+    "AccessKey": {
+      "title": "AccessKey",
+      "description": "Clave de acceso temporal para un estudiante o practicante",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "code": { "type": "string", "maxLength": 40, "pattern": "^[A-Z0-9_\\-]+$" },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "daysValid": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "expiresAt": { "type": "string", "maxLength": 64 },
+        "active": { "type": "boolean" }
+      },
+      "required": ["id", "code", "studentName", "daysValid", "createdAt", "expiresAt", "active"]
+    },
+    "ExamResult": {
+      "title": "ExamResult",
+      "description": "Resultado calificado de un Simulacro Oficial CALE",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "accessKeyId": { "type": "string", "maxLength": 128 },
+        "accessCode": { "type": "string", "maxLength": 40 },
+        "studentName": { "type": "string", "maxLength": 120 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "durationSeconds": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "conocimientosTotal": { "type": "number" },
+        "conocimientosCorrect": { "type": "number" },
+        "conocimientosPct": { "type": "number" },
+        "actitudesTotal": { "type": "number" },
+        "actitudesCorrect": { "type": "number" },
+        "actitudesPct": { "type": "number" },
+        "passed": { "type": "boolean" },
+        "themeBreakdown": { "type": "array" },
+        "answers": { "type": "array" }
+      },
+      "required": [
+        "id",
+        "accessCode",
+        "studentName",
+        "createdAt",
+        "durationSeconds",
+        "totalQuestions",
+        "conocimientosTotal",
+        "conocimientosCorrect",
+        "conocimientosPct",
+        "actitudesTotal",
+        "actitudesCorrect",
+        "actitudesPct",
+        "passed",
+        "themeBreakdown",
+        "answers"
+      ]
+    },
+    "Mistake": {
+      "title": "Mistake",
+      "description": "Pregunta fallada guardada para Repasar Errores",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "accessKeyId": { "type": "string", "maxLength": 128 },
+        "accessCode": { "type": "string", "maxLength": 40 },
+        "questionId": { "type": "string", "maxLength": 128 },
+        "bloque": { "type": "string", "enum": ["Conocimientos", "Actitudes"] },
+        "tema": {
+          "type": "string",
+          "enum": ["Movilidad Segura", "Normas", "Señales", "Vehículo", "Actitudes"]
+        },
+        "tipo": { "type": "string", "enum": ["multiple", "binary"] },
+        "caso": { "type": "string", "maxLength": 4000 },
+        "enunciado": { "type": "string", "maxLength": 6000 },
+        "opciones": { "type": "array" },
+        "wrongKey": { "type": "string", "maxLength": 100 },
+        "correctKey": { "type": "string", "maxLength": 100 },
+        "explicacion": { "type": "string", "maxLength": 4000 },
+        "failedCount": { "type": "number" },
+        "lastFailedAt": { "type": "string", "maxLength": 64 },
+        "resolved": { "type": "boolean" }
+      },
+      "required": [
+        "id",
+        "accessCode",
+        "questionId",
+        "bloque",
+        "tema",
+        "tipo",
+        "enunciado",
+        "opciones",
+        "wrongKey",
+        "correctKey",
+        "explicacion",
+        "failedCount",
+        "lastFailedAt",
+        "resolved"
+      ]
+    }
+  },
+  "firestore": {
+    "questions/{questionId}": {
+      "schema": { "$ref": "#/entities/Question" },
+      "description": "Banco oficial de preguntas CALE en tiempo real"
+    },
+    "accessKeys/{keyId}": {
+      "schema": { "$ref": "#/entities/AccessKey" },
+      "description": "Claves de acceso de estudiantes y practicantes"
+    },
+    "examResults/{attemptId}": {
+      "schema": { "$ref": "#/entities/ExamResult" },
+      "description": "Historial de intentos de simulacros CALE"
+    },
+    "mistakes/{mistakeId}": {
+      "schema": { "$ref": "#/entities/Mistake" },
+      "description": "Preguntas falladas pendientes de repaso por estudiante"
+    }
+  }
+}

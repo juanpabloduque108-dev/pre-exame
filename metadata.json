@@ -1,0 +1,6 @@
+{
+  "name": "Pre Examen — Simulador Teórico CALE Colombia",
+  "description": "Plataforma de preparación y simulacro oficial para el examen teórico de conducción CALE en Colombia, con control de acceso por clave, importación de bancos desde Word (.docx) y calificación estricta por bloques.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

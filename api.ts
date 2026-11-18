@@ -13,7 +13,8 @@ import {
   writeBatch,
 } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from './firebase.ts';
-import { SEED_QUESTIONS } from '../data/seedQuestions.ts';
+const SEED_QUESTIONS: any[] = [];
+
 import type {
   AccessKey,
   AttemptAnswerDetail,
